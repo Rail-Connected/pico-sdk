@@ -88,10 +88,11 @@ static void usb_irq(void) {
 
 #endif
 
-static void stdio_usb_out_chars(const char *buf, int length) {
+static int stdio_usb_out_chars(const char *buf, int length) {
+    int written = 0;
     static uint64_t last_avail_time;
     if (!mutex_try_enter_block_until(&stdio_usb_mutex, make_timeout_time_ms(PICO_STDIO_DEADLOCK_TIMEOUT_MS))) {
-        return;
+        return written;
     }
     if (stdio_usb_connected()) {
         for (int i = 0; i < length;) {
@@ -104,6 +105,7 @@ static void stdio_usb_out_chars(const char *buf, int length) {
                 tud_cdc_write_flush();
                 i += n2;
                 last_avail_time = time_us_64();
+                written = i;
             } else {
                 tud_task();
                 tud_cdc_write_flush();
@@ -118,6 +120,7 @@ static void stdio_usb_out_chars(const char *buf, int length) {
         last_avail_time = 0;
     }
     mutex_exit(&stdio_usb_mutex);
+    return written;
 }
 
 int stdio_usb_in_chars(char *buf, int length) {

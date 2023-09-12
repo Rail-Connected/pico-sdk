@@ -10,7 +10,7 @@
 #include "pico/stdio.h"
 
 struct stdio_driver {
-    void (*out_chars)(const char *buf, int len);
+    int (*out_chars)(const char *buf, int len);
     void (*out_flush)(void);
     int (*in_chars)(char *buf, int len);
     void (*set_chars_available_callback)(void (*fn)(void*), void *param);
