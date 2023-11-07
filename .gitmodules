@@ -1,12 +1,15 @@
-[submodule "tinyusb"]
+[submodule "lib/tinyusb"]
 	path = lib/tinyusb
-	url = https://github.com/hathach/tinyusb.git
+	url = git@github.com:Rail-Connected/tinyusb.git
+	branch = rc_dev
 [submodule "lib/cyw43-driver"]
 	path = lib/cyw43-driver
-	url = https://github.com/georgerobotics/cyw43-driver.git
+	url = git@github.com:Rail-Connected/cyw43-driver.git
+	branch = rc_dev
 [submodule "lib/lwip"]
 	path = lib/lwip
-	url = https://github.com/lwip-tcpip/lwip.git
+	url = git@github.com:Rail-Connected/lwip.git
+	branch = rc_dev
 [submodule "lib/mbedtls"]
 	path = lib/mbedtls
 	url = https://github.com/Mbed-TLS/mbedtls.git
