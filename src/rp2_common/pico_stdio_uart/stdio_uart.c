@@ -81,10 +81,11 @@ void stdio_uart_init_full(struct uart_inst *uart, uint baud_rate, int tx_pin, in
     stdio_set_driver_enabled(&stdio_uart, true);
 }
 
-static void stdio_uart_out_chars(const char *buf, int length) {
+static int stdio_uart_out_chars(const char *buf, int length) {
     for (int i = 0; i <length; i++) {
         uart_putc(uart_instance, buf[i]);
     }
+    return length;
 }
 
 int stdio_uart_in_chars(char *buf, int length) {
