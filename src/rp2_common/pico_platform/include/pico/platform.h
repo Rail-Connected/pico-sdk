@@ -324,16 +324,22 @@ extern "C" {
 /*! \brief Macro to return the maximum of two comparable values
  *  \ingroup pico_platform
  */
-#ifndef MAX
-#define MAX(a, b) ((a)>(b)?(a):(b))
-#endif
+#define MAX(a, b)               \
+    ({                          \
+        __typeof__(a) _a = (a); \
+        __typeof__(b) _b = (b); \
+        _a > _b ? _a : _b;      \
+    })
 
 /*! \brief Macro to return the minimum of two comparable values
  *  \ingroup pico_platform
  */
-#ifndef MIN
-#define MIN(a, b) ((b)>(a)?(a):(b))
-#endif
+#define MIN(a, b)               \
+    ({                          \
+        __typeof__(a) _a = (a); \
+        __typeof__(b) _b = (b); \
+        _a < _b ? _a : _b;      \
+    })
 
 #define pico_default_asm(...) __asm (".syntax unified\n" __VA_ARGS__)
 #define pico_default_asm_volatile(...) __asm volatile (".syntax unified\n" __VA_ARGS__)
