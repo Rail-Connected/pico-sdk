@@ -90,6 +90,12 @@ static inline void unreset_block_wait(uint32_t bits) {
     while (~resets_hw->reset_done & bits)
         tight_loop_contents();
 }
+static inline uint32_t unreset_block_wait_timeout(uint32_t bits, uint32_t max_cycles) {
+    hw_clear_bits(&resets_hw->reset, bits);
+    while ((~resets_hw->reset_done & bits) && max_cycles--)
+        tight_loop_contents();
+    return ~resets_hw->reset_done & bits;
+}
 /// \end::reset_funcs[]
 
 #ifdef __cplusplus

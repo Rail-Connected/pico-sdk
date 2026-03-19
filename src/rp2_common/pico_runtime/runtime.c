@@ -64,6 +64,7 @@ void runtime_install_stack_guard(void *stack_bottom) {
                    | 0x10000000; // XN = disable instruction fetch; no other bits means no permissions
 }
 
+uint32_t unreset_fail=0;
 void runtime_init(void) {
     // Reset all peripherals to put system into a known state,
     // - except for QSPI pads and the XIP IO bank, as this is fatal if running from flash
@@ -80,7 +81,8 @@ void runtime_init(void) {
 
     // Remove reset from peripherals which are clocked only by clk_sys and
     // clk_ref. Other peripherals stay in reset until we've configured clocks.
-    unreset_block_wait(RESETS_RESET_BITS & ~(
+    uint32_t mloops = 1;
+    unreset_fail |= unreset_block_wait_timeout(RESETS_RESET_BITS & ~(
             RESETS_RESET_ADC_BITS |
             RESETS_RESET_RTC_BITS |
             RESETS_RESET_SPI0_BITS |
@@ -88,7 +90,7 @@ void runtime_init(void) {
             RESETS_RESET_UART0_BITS |
             RESETS_RESET_UART1_BITS |
             RESETS_RESET_USBCTRL_BITS
-    ));
+    ),mloops<<20);
 
     // pre-init runs really early since we need it even for memcpy and divide!
     // (basically anything in aeabi that uses bootrom)
@@ -110,7 +112,7 @@ void runtime_init(void) {
     clocks_init();
 
     // Peripheral clocks should now all be running
-    unreset_block_wait(RESETS_RESET_BITS);
+    unreset_fail |= unreset_block_wait_timeout(RESETS_RESET_BITS,mloops<<20);
 
 #if !PICO_IE_26_29_UNCHANGED_ON_RESET
     // after resetting BANK0 we should disable IE on 26-29
