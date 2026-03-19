@@ -326,9 +326,9 @@ extern "C" {
  */
 #define MAX(a, b)               \
     ({                          \
-        __typeof__(a) _a = (a); \
-        __typeof__(b) _b = (b); \
-        _a > _b ? _a : _b;      \
+        __typeof__(a) _max_a = (a); \
+        __typeof__(b) _max_b = (b); \
+        _max_a > _max_b ? _max_a : _max_b;      \
     })
 
 /*! \brief Macro to return the minimum of two comparable values
@@ -336,9 +336,9 @@ extern "C" {
  */
 #define MIN(a, b)               \
     ({                          \
-        __typeof__(a) _a = (a); \
-        __typeof__(b) _b = (b); \
-        _a < _b ? _a : _b;      \
+        __typeof__(a) _min_a = (a); \
+        __typeof__(b) _min_b = (b); \
+        _min_a < _min_b ? _min_a : _min_b;      \
     })
 
 #define pico_default_asm(...) __asm (".syntax unified\n" __VA_ARGS__)
